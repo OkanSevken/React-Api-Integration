@@ -1,0 +1,28 @@
+{
+    "appointments":[
+        {
+            "appointmentDate": "2023-12-05T00:00:00Z",
+            "appointmentTime": "12:15:25.128",
+            "patientId": 1,
+            "doctorId": 1,
+            "description": "dasdsadasdasd",
+            "isApproved": true
+        },
+        {
+            "appointmentDate": "2024-05-17T07:47:28.885Z",
+            "appointmentTime": "15:00",
+            "patientId": 1,
+            "doctorId": 2,
+            "description": "hasta",
+            "isApproved": false
+        },
+        {
+            "appointmentDate": "2024-03-07T08:39:03.375Z",
+            "appointmentTime": "09:15",
+            "patientId": 0,
+            "doctorId": 0,
+            "description": "kkkk",
+            "isApproved": false
+        }
+    ]
+}
