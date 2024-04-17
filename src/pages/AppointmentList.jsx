@@ -13,6 +13,7 @@ import {
   Table,
 } from "semantic-ui-react";
 import AppointmentService from "../services/appointmentService";
+
 import {Link} from 'react-router-dom';
 
 function AppointmentList() {
@@ -21,7 +22,7 @@ function AppointmentList() {
   useEffect(() => {
     let appointmentService = new AppointmentService(); //Sayfa yüklendiğinde yapılması istenen kodu useEffect içine yaz.
     appointmentService
-      .getApponitments()
+      .getAppointments()
       .then((result) => setAppointments(result.data));
   },[]);
 

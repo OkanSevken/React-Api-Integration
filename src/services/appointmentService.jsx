@@ -2,27 +2,28 @@ import React from "react";
 import axios from "axios";
 
 export default class AppointmentService {
-  getApponitments() {
+  getAppointments() {
     return axios.get(
       "http://localhost:5000/api/Appointment/GetAllAppointments"
     );
   }
 
-  getByIdApponitments(id) {
-    return axios.get(
-      "http://localhost:5000/api/Appointment/GetByIdAppointments?id=" + id
+  
+  updateAppointment(id, data) {
+    return axios.put(
+      `http://localhost:5000/api/Appointment/UpdateAppointments/${id}`,
+      data
     );
   }
 
-  postApponitments(data) {
-    return axios.post(
-      "http://localhost:5000/api/Appointment/CreateAppointments",
-      data,
-      {
-        headers: {
-          "Content-Type": "application/json", // İstek içeriğinin JSON formatında olduğunu belirtin
-        },
-      }
+  deleteAppointment(id) {
+    return axios.delete(
+      `http://localhost:5000/api/Appointment/DeleteAppointments/${id}`
     );
   }
 }
+// getByIdAppointments(id) {
+  //   return axios.get(
+  //     `http://localhost:5000/api/Appointment/GetByIdAppointments?id=${id}`
+  //   );
+  // }

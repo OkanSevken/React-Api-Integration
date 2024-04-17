@@ -6,22 +6,19 @@ import { FormField, Button, Checkbox } from 'semantic-ui-react'
 
 export default function AppointmentAdd() {
   const initialValues = {
-    AppointmentDate: "",
-    AppointmentTime: "",
-    DoctorId: "",
-    PatientId: "",
-    CreaterUserId:"",
-    Description: "",
-
+    appointmentDate: "",
+    appointmentTime: "",
+    doctorId: "",
+    patientId: "",
+    description: "",
   };
 
   const schema = Yup.object({
-    AppointmentDate: Yup.string().required("Randevu tarihi zorunlu"),
-    AppointmentTime: Yup.string().required("Randevu saati zorunlu"),
-    DoctorId: Yup.number().required("Doktor id zorunlu"),
-    PatientId: Yup.number().required("Hasta id zorunlu"),
-    CreaterUserId: Yup.number().required("Hasta id zorunlu"),
-    Description: Yup.string().required("Randevu açıklaması zorunlu"),
+    appointmentDate: Yup.string().required("Randevu tarihi zorunlu"),
+    appointmentTime: Yup.string().required("Randevu saati zorunlu"),
+    doctorId: Yup.number().required("Doktor id zorunlu"),
+    patientId: Yup.number().required("Hasta id zorunlu"),
+    description: Yup.string().required("Randevu açıklaması zorunlu"),
   });
 
   const handleSubmit = (values) => {
@@ -30,6 +27,15 @@ export default function AppointmentAdd() {
       .then(response => {
         console.log("API Response:", response.data);
         
+      alert("Randevu başarıyla oluşturuldu!");
+      
+      
+    })
+    .catch(error => {
+      console.error("API Error:", error);
+     
+      alert("Randevu oluşturulurken bir hata oluştu.");
+      
       })   
   };
 
@@ -41,19 +47,19 @@ export default function AppointmentAdd() {
       >
         <Form className="ui form">
           <FormField>
-            <Field name="AppointmentDate" placeholder="Randevu Tarihi"></Field>
+            <Field name="appointmentDate" placeholder="Randevu Tarihi" ></Field>
           </FormField>
           <FormField>
-            <Field name="AppointmentTime" placeholder="Randevu Saati"></Field>
+            <Field name="appointmentTime" placeholder="Randevu Saati"></Field>
           </FormField>
           <FormField>
-            <Field name="DoctorId" placeholder="Doktor Id"></Field>
+            <Field name="doctorId" placeholder="Doktor Id"></Field>
           </FormField>
           <FormField>
-            <Field name="PatientId" placeholder="Hasta Id "></Field>
+            <Field name="patientId" placeholder="Hasta Id "></Field>
           </FormField>
           <FormField>
-            <Field name="Description" placeholder="Randevu Açıklaması"></Field>
+            <Field name="description" placeholder="Randevu Açıklaması"></Field>
           </FormField>
           <Button color="green" type="submit">Randevu Oluştur</Button>
         </Form>

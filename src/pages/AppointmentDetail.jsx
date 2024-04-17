@@ -1,28 +1,50 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {
-    CardMeta,
-    CardHeader,
-    CardGroup,
-    CardDescription,
-    CardContent,
-    Button,
-    Card,
-    Image,
-  } from 'semantic-ui-react'
-import AppointmentService from "../services/appointmentService";
+  CardMeta,
+  CardHeader,
+  CardGroup,
+  CardDescription,
+  CardContent,
+  Button,
+  Card,
+  Image,
+} from 'semantic-ui-react';
+import axios from "axios";
 
 export default function AppointmentDetail() {
-  let { id } = useParams(); // Destructing
+  const { id } = useParams(); // Destructing
+  const navigate = useNavigate(); // useHistory yerine useNavigate kullan
 
   const [appointment, setAppointment] = useState({});
 
   useEffect(() => {
-    let appointmentService = new AppointmentService(); //Sayfa yüklendiğinde yapılması istenen kodu useEffect içine yaz.
-    appointmentService
-      .getByIdApponitments(id)
-      .then((result) => setAppointment(result.data));
-  },[]);
+    const fetchAppointmentData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/api/Appointment/GetByIdAppointments?id=${id}`);
+        setAppointment(response.data);
+      } catch (error) {
+        console.error("API Error:", error);
+      }
+    };
+    
+    fetchAppointmentData();
+  }, [id]);
+
+  const handleUpdateClick = () => {
+    navigate(`/appointments/update/${id}`); // Güncelleme butonuna tıklandığında güncelleme sayfasına yönlendir
+  };
+
+  const handleDeleteClick = async () => {
+    try {
+      await axios.delete(`http://localhost:5000/api/Appointment/DeleteAppointments/${id}`);
+      alert("Randevu başarıyla silindi!");
+      navigate("/appointments");
+    } catch (error) {
+      console.error("API Error:", error);
+      alert("Randevu silinirken bir hata oluştu.");
+    }
+  };
 
   return (
     <div>
@@ -42,12 +64,8 @@ export default function AppointmentDetail() {
           </CardContent>
           <CardContent extra>
             <div className="ui two buttons">
-              <Button basic color="green">
-                Onayla
-              </Button>
-              <Button basic color="red">
-                Reddet
-              </Button>
+              <Button basic color="green" onClick={handleUpdateClick}>Güncelle</Button> 
+              <Button basic color="red" onClick={handleDeleteClick}>Sil</Button>
             </div>
           </CardContent>
         </Card>            
