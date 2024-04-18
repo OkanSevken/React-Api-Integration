@@ -9,6 +9,7 @@ import Home from "../pages/Home";
 import Register from "../pages/Register";
 import DoctorCheckAdd from "../pages/DoctorCheckAdd";
 import AppointmentUpdate from "../pages/AppointmentUpdate";
+import AppointmentDelete from "../pages/AppointmentDelete";
 
 function Dashboard() {
   return (
@@ -27,6 +28,7 @@ function Dashboard() {
               <Route path="/doctorCheck/add" element={<DoctorCheckAdd />} />
               <Route path="/appointments/:id" element={<AppointmentDetail />} />
               <Route path="/appointments/update/:id" element={<AppointmentUpdate />} />
+              <Route path="/appointments/delete/:id" element={<AppointmentDelete />} />
             </Routes>
           </Grid.Column>
         </Grid.Row>

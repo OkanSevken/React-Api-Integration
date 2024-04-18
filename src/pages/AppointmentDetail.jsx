@@ -9,41 +9,36 @@ import {
   Button,
   Card,
   Image,
-} from 'semantic-ui-react';
+} from "semantic-ui-react";
 import axios from "axios";
+import appointmentDeleteService from "../services/appointmentDeleteService";
 
 export default function AppointmentDetail() {
   const { id } = useParams(); // Destructing
-  const navigate = useNavigate(); // useHistory yerine useNavigate kullan
-
+  const navigate = useNavigate();
   const [appointment, setAppointment] = useState({});
 
   useEffect(() => {
     const fetchAppointmentData = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/Appointment/GetByIdAppointments?id=${id}`);
+        const response = await axios.get(
+          `http://localhost:5000/api/Appointment/GetByIdAppointments?id=${id}`
+        );
         setAppointment(response.data);
       } catch (error) {
         console.error("API Error:", error);
       }
     };
-    
+
     fetchAppointmentData();
   }, [id]);
 
   const handleUpdateClick = () => {
-    navigate(`/appointments/update/${id}`); // Güncelleme butonuna tıklandığında güncelleme sayfasına yönlendir
+    navigate(`/appointments/update/${id}`);
   };
 
   const handleDeleteClick = async () => {
-    try {
-      await axios.delete(`http://localhost:5000/api/Appointment/DeleteAppointments/${id}`);
-      alert("Randevu başarıyla silindi!");
-      navigate("/appointments");
-    } catch (error) {
-      console.error("API Error:", error);
-      alert("Randevu silinirken bir hata oluştu.");
-    }
+    navigate(`/appointments/delete/${id}`);
   };
 
   return (
@@ -57,18 +52,25 @@ export default function AppointmentDetail() {
               src="/images/avatar/large/steve.jpg"
             />
             <CardHeader>{appointment.description}</CardHeader>
-            <CardMeta>{appointment.appointmentDate} - {appointment.appointmentTime} </CardMeta>
+            <CardMeta>
+              {appointment.appointmentDate} - {appointment.appointmentTime}{" "}
+            </CardMeta>
             <CardDescription>
-              <strong>Hasta Id: </strong> {appointment.patientId} - <strong>Doktor Id:</strong> {appointment.doctorId} 
+              <strong>Hasta Id: </strong> {appointment.patientId} -{" "}
+              <strong>Doktor Id:</strong> {appointment.doctorId}
             </CardDescription>
           </CardContent>
           <CardContent extra>
             <div className="ui two buttons">
-              <Button basic color="green" onClick={handleUpdateClick}>Güncelle</Button> 
-              <Button basic color="red" onClick={handleDeleteClick}>Sil</Button>
+              <Button basic color="green" onClick={handleUpdateClick}>
+                Güncelle
+              </Button>
+              <Button basic color="red" onClick={handleDeleteClick}>
+                Sil
+              </Button>
             </div>
           </CardContent>
-        </Card>            
+        </Card>
       </CardGroup>
     </div>
   );
