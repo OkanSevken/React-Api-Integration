@@ -10,10 +10,10 @@ export default function AppointmentDelete() {
 
   const handleSubmit = async (values) => {
     try {
-      // Axios kullanarak silme isteği gönderin
+      
       await appointmentDeleteService.deleteAppointment(values); 
       
-      // Başarı mesajını gösterin ve yönlendirme yapın
+ 
       alert(`Randevu ID: ${values} başarıyla silindi!`);
       navigate(`/appointments`);
     } catch (error) {
@@ -23,16 +23,22 @@ export default function AppointmentDelete() {
   };
 
   return (
+    
     <Formik
       initialValues={{ id: id }}
-      onSubmit={handleSubmit}
+      onSubmit={handleSubmit}     
     >
+      
       <Form className="ui form">
         <FormField>
+        <br/>
           <label>Randevu ID</label>
           <Field name="id" type="number" readOnly />
         </FormField>
-        <Button type="submit" basic color="red">Sil</Button>
+        <Button type="submit" basic color="blue">Sil</Button>
+        <Button  href="/appointments" basic color="red">
+              Geri Çık
+            </Button>
       </Form>
     </Formik>
   );

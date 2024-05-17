@@ -1,10 +1,14 @@
 import axios from "axios";
 
-export default class getByIdAppointmentService {
-  getByIdAppointment (id, data) {
-        return axios.get(
-          `http://localhost:5000/api/Appointment/GetByIdAppointments/${id}`,
-          data
-        );
-      }
-}
+const API_BASE_URL = "http://127.0.0.1:5013/api/Appointment/";
+
+const getByIdAppointmentService = {
+  getByIdAppointment: async (id) => {
+    return axios.get(`${API_BASE_URL}/GetByIdAppointments/${id}`);
+  }
+};
+
+export default getByIdAppointmentService;
+
+
+

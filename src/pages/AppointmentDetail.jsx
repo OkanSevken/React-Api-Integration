@@ -11,20 +11,19 @@ import {
   Image,
 } from "semantic-ui-react";
 import axios from "axios";
-import appointmentDeleteService from "../services/appointmentDeleteService";
 
 export default function AppointmentDetail() {
-  const { id } = useParams(); // Destructing
+  const { id } = useParams();
   const navigate = useNavigate();
-  const [appointment, setAppointment] = useState({});
+  const [appointments, setAppointments] = useState([]);
 
   useEffect(() => {
     const fetchAppointmentData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/Appointment/GetByIdAppointments?id=${id}`
+          `http://127.0.0.1:5013/api/Appointment/GetByIdAppointments?id=${id}`
         );
-        setAppointment(response.data);
+        setAppointments(response.data);
       } catch (error) {
         console.error("API Error:", error);
       }
@@ -43,35 +42,37 @@ export default function AppointmentDetail() {
 
   return (
     <div>
-      <CardGroup>
-        <Card fluid>
-          <CardContent>
-            <Image
-              floated="right"
-              size="mini"
-              src="/images/avatar/large/steve.jpg"
-            />
-            <CardHeader>{appointment.description}</CardHeader>
-            <CardMeta>
-              {appointment.appointmentDate} - {appointment.appointmentTime}{" "}
-            </CardMeta>
-            <CardDescription>
-              <strong>Hasta Id: </strong> {appointment.patientId} -{" "}
-              <strong>Doktor Id:</strong> {appointment.doctorId}
-            </CardDescription>
-          </CardContent>
-          <CardContent extra>
-            <div className="ui two buttons">
-              <Button basic color="green" onClick={handleUpdateClick}>
-                Güncelle
-              </Button>
-              <Button basic color="red" onClick={handleDeleteClick}>
-                Sil
-              </Button>
-            </div>
-          </CardContent>
+      <br/><br/>
+      {appointments.map((appointment) => (
+        <Card key={appointment.id} fluid>
+          <Card.Content>
+            <Card.Header>
+              Randevu Açıklaması: {appointment.description}
+            </Card.Header>
+            <br />
+            <Card.Description>
+              <strong>Randevu Tarihi:</strong>{" "}
+              {formatAppointmentDate(appointment.appointmentDate)} <br /> <br />
+              <strong>Randevu Saati:</strong> {appointment.appointmentTime}
+              <br />
+              <br />
+            </Card.Description>
+            <Card.Description>
+              <strong>Hasta Adı:</strong> {appointment.patientName} <br />
+              <br />
+              <strong>Doktor Adı:</strong> {appointment.doctorName}
+            </Card.Description>
+          </Card.Content>
+          <Button as="a" href="/appointments" basic color="red">
+            Geri Çık
+          </Button>
         </Card>
-      </CardGroup>
+      ))}
     </div>
   );
+}
+
+function formatAppointmentDate(dateString) {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("tr-TR");
 }

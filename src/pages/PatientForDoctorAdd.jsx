@@ -1,28 +1,27 @@
-import React, { useState, useEffect } from "react";
 import axios from "axios";
+import React, { useState, useEffect } from "react";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { FormField, Button } from "semantic-ui-react";
 
-export default function AppointmentAdd() {
+export default function PatientForDoctorAdd() {
   const initialValues = {
-    appointmentDate: "",
-    appointmentTime: "",
     doctorId: "",
     patientId: "",
-    description: "",
   };
-
-  const validationSchema = Yup.object({
-    appointmentDate: Yup.string().required("Randevu tarihi zorunlu"),
-    appointmentTime: Yup.string().required("Randevu saati zorunlu"),
-    doctorId: Yup.string().required("Doktor seçimi zorunlu"),
-    patientId: Yup.string().required("Hasta seçimi zorunlu"),
-    description: Yup.string().required("Randevu açıklaması zorunlu"),
-  });
 
   const [doctors, setDoctors] = useState([]);
   const [patients, setPatients] = useState([]);
+
+  const validationSchema = Yup.object({
+    doctorId: Yup.string().required("Doktor seçimi zorunlu"),
+    patientId: Yup.string().required("Hasta seçimi zorunlu"),
+  });
+
+  useEffect(() => {
+    fetchDoctors();
+    fetchPatients();
+  }, []);
 
   const fetchDoctors = async () => {
     try {
@@ -35,20 +34,12 @@ export default function AppointmentAdd() {
     }
   };
 
-  useEffect(() => {
-    fetchDoctors();
-  }, []);
-
-  const handleDoctorChange = async (selectedDoctorId, setFieldValue) => {
+  const fetchPatients = async () => {
     try {
-      const response = await axios.post(
-        "http://127.0.0.1:5013/api/PatientForDoctorContoller/GetAllListPatient",
-        { doctorId: selectedDoctorId }
+      const response = await axios.get(
+        "http://127.0.0.1:5013/api/PatientForDoctorContoller/GetAllListPatientWithoutDoctor"
       );
       setPatients(response.data);
-      console.log("Selected Doctor ID:", selectedDoctorId);
-      // Sadece doktorun id'sini setFieldValue ile doctorId alanına atadım
-      setFieldValue("doctorId", selectedDoctorId);
     } catch (error) {
       console.error("Patients Fetch Error:", error);
     }
@@ -57,26 +48,22 @@ export default function AppointmentAdd() {
   const handleSubmit = async (values) => {
     try {
       console.log("Form Values:", values);
-      const formattedValues = {
-        ...values,
-        appointmentDate: new Date(values.appointmentDate).toISOString().split('T')[0]
-      };
       const response = await axios.post(
-        "http://127.0.0.1:5013/api/Appointment/CreateAppointments",
-        formattedValues
+        "http://127.0.0.1:5013/api/PatientForDoctorContoller/CreatePatientForDoctor",
+        values
       );
       console.log("API Response:", response.data);
-      alert("Randevu başarıyla oluşturuldu!");
+      alert("Atama başarıyla yapıldı!");
     } catch (error) {
       console.error("API Error:", error);
-      alert("Randevu oluşturulurken bir hata oluştu.");
+      alert("Atama yapılırken bir hata oluştu.");
     }
   };
 
   return (
     <div>
-      <br/>
-      <h2>Randevu Ekle</h2>
+       <br/>
+      <h2>Doktor - Hasta Atama</h2>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -87,30 +74,16 @@ export default function AppointmentAdd() {
             actions.setSubmitting(false);
           } catch (error) {
             console.error("Submit Error:", error);
-            alert("Randevu oluşturulurken bir hata oluştu.");
+            alert("Atama yapılırken bir hata oluştu.");
             actions.setSubmitting(false);
           }
         }}
       >
-        {({ values, setFieldValue }) => (
+        {({ values }) => (
           <Form className="ui form">
             <FormField>
-              <label>Randevu Tarihi</label>
-              <Field name="appointmentDate" placeholder="Randevu Tarihi" type="date" />
-            </FormField>
-            <FormField>
-              <label>Randevu Saati</label>
-              <Field name="appointmentTime" placeholder="Randevu Saati" type="time" />
-            </FormField>
-            <FormField>
               <label>Doktor</label>
-              <Field
-                as="select"
-                name="doctorId"
-                onChange={(e) =>
-                  handleDoctorChange(e.target.value, setFieldValue)
-                }
-              >
+              <Field as="select" name="doctorId">
                 <option value="">Doktor Seçin</option>
                 {doctors.map((doctor) => (
                   <option key={doctor.id} value={doctor.id}>
@@ -125,22 +98,19 @@ export default function AppointmentAdd() {
                 <option value="">Hasta Seçin</option>
                 {patients.map((patient) => (
                   <option key={patient.id} value={patient.id}>
-                    {patient.patientName}
+                    {patient.usernameSurname}
                   </option>
                 ))}
               </Field>
             </FormField>
-            <FormField>
-              <label>Randevu Açıklaması</label>
-              <Field
-                name="description"
-                placeholder="Randevu Açıklaması"
-                as="textarea"
-              />
-            </FormField>
+            <div style={{ marginTop: "20px",  display: "flex" }}>
             <Button basic color="green" type="submit">
-              Randevu Oluştur
+              Atama Yap
             </Button>
+            <Button as="a" href="/patientForDoctor/list" basic color="red">
+              Geri Çık
+            </Button>
+            </div>
           </Form>
         )}
       </Formik>

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:5000/api/Appointment";
+const API_BASE_URL = "http://127.0.0.1:5013/api/Appointment";
 
 const appointmentDeleteService = {
   deleteAppointment: async (data) => {
