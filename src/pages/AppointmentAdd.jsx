@@ -3,6 +3,7 @@ import axios from "axios";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { FormField, Button } from "semantic-ui-react";
+import { useNavigate } from 'react-router-dom';
 
 export default function AppointmentAdd() {
   const initialValues = {
@@ -23,6 +24,12 @@ export default function AppointmentAdd() {
 
   const [doctors, setDoctors] = useState([]);
   const [patients, setPatients] = useState([]);
+  const navigate = useNavigate(); 
+
+  useEffect(() => {
+    const userId = sessionStorage.getItem('userId');
+    console.log("userId:", userId); 
+  }, []); 
 
   const fetchDoctors = async () => {
     try {
@@ -138,8 +145,11 @@ export default function AppointmentAdd() {
                 as="textarea"
               />
             </FormField>
-            <Button basic color="green" type="submit">
+            <Button as="a" href="/appointments" basic color="green" type="submit">
               Randevu Oluştur
+            </Button>
+            <Button as="a" href="/appointments" basic color="blue" type="submit">
+              Randevu Listesi
             </Button>
           </Form>
         )}

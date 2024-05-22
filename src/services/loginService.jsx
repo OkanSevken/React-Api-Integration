@@ -10,6 +10,24 @@ const loginService = {
     } catch (error) {
       throw error;
     }
+  },
+
+  getAuthorizedData: async (endpoint) => {
+    const userId = sessionStorage.getItem('userId');
+    if (!userId) {
+      throw new Error("User is not authenticated");
+    }
+
+    try {
+      const response = await axios.get(endpoint, {
+        headers: {
+          'Authorization': `Bearer ${userId}` // Örnek olarak Bearer token olarak userId kullanılıyor.
+        }
+      });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   }
 };
 

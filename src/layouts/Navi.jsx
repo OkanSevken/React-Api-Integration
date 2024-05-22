@@ -1,35 +1,61 @@
-import React, { useState } from "react";
-import { MenuMenu, MenuItem, Menu, Container } from "semantic-ui-react";
+import React, { useState, useEffect } from "react";
+import { Menu, MenuItem, Container } from "semantic-ui-react";
+import { Link, useLocation } from "react-router-dom";
 import SignedOut from "./SignedOut";
-import SignedIn from "./SignedIn";
-import { Link } from "react-router-dom"; // React Router'dan Link ekleyin
-import Giris from "../pages/Giris";
 
 function Navi() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  
-  // const handleSignOut=()=>{
-  //   setIsAuthenticated(false)
-  
-  // }
+  const [userId, setUserId] = useState(null);
+  const location = useLocation();
 
-  // const handleSignIn=()=>{
-  //   setIsAuthenticated(true)
-  // }
+  useEffect(() => {
+    const storedUserId = sessionStorage.getItem('userId');
+    if (storedUserId) {
+      setIsAuthenticated(true);
+      setUserId(storedUserId);
+    }
+  }, []);
+
+  const handleSignOut = () => {
+    setIsAuthenticated(false);
+    setUserId(null);
+    sessionStorage.removeItem('userId');
+  };
+
+  const handleSignIn = (id) => {
+    setIsAuthenticated(true);
+    setUserId(id);
+    sessionStorage.setItem('userId', id);
+  };
+
+  const isAuthPage = location.pathname === "/" || location.pathname === "/giris" || location.pathname === "/register";
+  const isSecretaryPage = location.pathname === "/appointments/add";
+  const isRestrictedUser = ['1', '2', '3'].includes(userId);
 
   return (
     <div>
       <Menu inverted fixed="top">
         <Container>
-          <MenuItem as={Link} to="/appointments" name="Randevu" /> 
-          <MenuItem as={Link} to="/appointments/add" name="Randevu ekle" /> 
-          {/* <MenuItem as={Link} to="/patientForDoctor/add" name="Doktor Hasta"/> */}
-          <MenuItem as={Link} to="/patientForDoctor/list" name="Doktor -  Hasta "/>
-          {/* <MenuItem as={Link} to="/doctorCheck/add" name="Doktor Kontrol" />  */}
-          {/* <MenuItem as={Link} to="/appointments/update/:id" name="Randevu Güncelle" />  */}
-          <MenuMenu position="right">
-            {isAuthenticated ? <SignedIn signOut={handleSignOut} birsey="1" /> : <SignedOut signIn={Giris} />}
-          </MenuMenu>
+          {!isAuthPage && (
+            <>
+              {isSecretaryPage && !isRestrictedUser && (
+                <>
+                  <MenuItem as={Link} to="/appointments" name="Randevu" />
+                  <MenuItem as={Link} to="/appointments/add" name="Sekreter Randevu ekle" />
+                </>
+              )}
+              <MenuItem as={Link} to="/patientForDoctor/list" name="Doktor - Hasta Atama" />
+            </>
+          )}
+          {!isAuthPage && !isRestrictedUser && (
+            <MenuItem as={Link} to="/appointmentsForPatient/add" name="Hasta Randevu ekle" />
+          )}
+          <Menu.Menu position="right">
+            {!isAuthPage && isAuthenticated && (
+              <MenuItem as={Link} to="/" onClick={handleSignOut}>Çıkış Yap</MenuItem>
+            )}
+            {isAuthPage && !isAuthenticated && <SignedOut signIn={handleSignIn} />}
+          </Menu.Menu>
         </Container>
       </Menu>
     </div>

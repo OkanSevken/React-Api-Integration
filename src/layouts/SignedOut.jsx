@@ -1,14 +1,13 @@
 import React from "react";
 import { Button, MenuItem } from "semantic-ui-react";
 import { Link } from "react-router-dom";
-import Giris from "../pages/Giris";
 
-export default function SignedOut({ Giris }) {
+export default function SignedOut({ signIn }) {
   return (
     <div>
       <MenuItem>
         <Link to="/giris">
-          <Button primary onClick={Giris}>
+          <Button primary onClick={signIn}>
             Giriş Yap
           </Button>
         </Link>

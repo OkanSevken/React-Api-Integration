@@ -2,7 +2,7 @@ import React from "react";
 import { Formik, Form, Field } from "formik";
 import { FormField, Button, Grid } from 'semantic-ui-react';
 import registerService from "../services/registerService"; 
-import { useNavigate } from "react-router-dom";
+import { useNavigate ,Link} from "react-router-dom";
 
 export default function Register() {
     const navigate = useNavigate();
@@ -27,7 +27,7 @@ export default function Register() {
             verticalAlign="middle"
         >
             <Grid.Column style={{ maxWidth: 450 }}>
-                <h2>Kayıt Ol</h2>
+                <h2>Kayıt Ol</h2> <br/><br/>
                 <Formik
                     initialValues={{ name: '', surname: '', usernameSurname: '', password: '' }}
                     onSubmit={handleSubmit}
@@ -52,6 +52,7 @@ export default function Register() {
                         <Button type="submit" color="teal" fluid size="large">
                             Kayıt Ol
                         </Button>
+                        <p> Hesabınız var mı? <Link to="/giris">Giriş Yap</Link></p>
                     </Form>
                 </Formik>
             </Grid.Column>

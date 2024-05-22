@@ -1,5 +1,6 @@
+import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   CardMeta,
   CardHeader,
@@ -10,12 +11,18 @@ import {
   Card,
   Image,
 } from "semantic-ui-react";
-import axios from "axios";
 
 export default function AppointmentDetail() {
   const { id } = useParams();
-  const navigate = useNavigate();
   const [appointments, setAppointments] = useState([]);
+  const [userId, setUserId] = useState('');
+
+  useEffect(() => {
+    const userIdFromSession = sessionStorage.getItem('userId');
+    if (userIdFromSession) {
+      setUserId(userIdFromSession);
+    }
+  }, []);
 
   useEffect(() => {
     const fetchAppointmentData = async () => {
@@ -24,13 +31,14 @@ export default function AppointmentDetail() {
           `http://127.0.0.1:5013/api/Appointment/GetByIdAppointments?id=${id}`
         );
         setAppointments(response.data);
+        console.log('userId:', userId); // userId'yi konsola yazdır
       } catch (error) {
         console.error("API Error:", error);
       }
     };
 
     fetchAppointmentData();
-  }, [id]);
+  }, [id, userId]); 
 
   const handleUpdateClick = () => {
     navigate(`/appointments/update/${id}`);

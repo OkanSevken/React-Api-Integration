@@ -107,8 +107,8 @@ export default function PatientForDoctorAdd() {
             <Button basic color="green" type="submit">
               Atama Yap
             </Button>
-            <Button as="a" href="/patientForDoctor/list" basic color="red">
-              Geri Çık
+            <Button as="a" href="/appointments" basic color="red">
+              Randevu Listesi
             </Button>
             </div>
           </Form>

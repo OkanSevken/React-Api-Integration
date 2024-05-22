@@ -1,9 +1,11 @@
-import React from 'react'
+import React from 'react';
 
 const Home = () => {
-  return (
-    <div>Home</div>
-  )
-}
+  const usernameSurname = sessionStorage.getItem('usernameSurname');
 
-export default Home
+  return (
+    <div>Hoşgeldiniz, {usernameSurname}</div>
+  );
+};
+
+export default Home;
